@@ -3,54 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kenari Slot Demo</title>
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-
-    header {
-      background: #1a1a1a;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .game-list {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-      flex-wrap: wrap;
-    }
-
-    .game-card {
-      width: 140px;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.2s, box-shadow 0.3s;
-    }
-
-    .game-card:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 15px #ffcc00;
-    }
-
-    .game-card img {
-      width: 100%;
-      border-radius: 10px;
-      border: 2px solid #444;
-    }
-
-    .game-card span {
-      display: block;
-      margin-top: 8px;
-      font-size: 15px;
-      color: #ddd;
-    }
-  </style>
+  <title>Kenari Slot Lobby</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
   <header>
@@ -58,17 +13,19 @@
   </header>
 
   <div class="game-list">
-    <div class="game-card" onclick="window.open('https://m.pgsoft-games.com/mahjong-ways-3/index.html', '_blank')">
+    <div class="game-card" onclick="openGame('https://m.pgsoft-games.com/mahjong-ways-3/index.html')">
       <img src="https://cdn.pgsoft-games.com/mahjong-ways-3/icon.png" alt="Mahjong Wins 3">
       <span>Mahjong Wins 3</span>
     </div>
-    <div class="game-card" onclick="window.open('https://m.pgsoft-games.com/lucky-neko/index.html', '_blank')">
-      <img src="https://cdn.pgsoft-games.com/lucky-neko/icon.png" alt="Lucky Neko">
-      <span>Lucky Neko</span>
+
+    <div class="game-card" onclick="openGame('https://d3pvfi6m7bxu71.cloudfront.net/gs2c/html5Game.do?extGame=1&symbol=vs20olympgold&gname=Gates%20of%20Olympus%20Super%20Scatter&jurisdictionID=99&mgckey=stylename@generic~SESSION@dc18cd78-5aac-43a4-b061-4a13198642db')">
+      <img src="https://i.ibb.co/Wt4t8Hf/gates.jpg" alt="Gates of Olympus">
+      <span>Gates of Olympus</span>
     </div>
-    <div class="game-card" onclick="window.open('https://m.pgsoft-games.com/treasures-aztec/index.html', '_blank')">
-      <img src="https://d3pvfi6m7bxu71.cloudfront.net/gs2c/html5Game.do?extGame=1&symbol=vs20olympgold&gname=Gates%20of%20Olympus%20Super%20Scatter&jurisdictionID=99&mgckey=stylename@generic~SESSION@dc18cd78-5aac-43a4-b061-4a13198642db" alt="Treasures of Aztec">
-      <span>Treasures of Aztec</span>
+
+    <div class="game-card" onclick="openGame('https://m.pgsoft-games.com/sweet-bonanza/index.html')">
+      <img src="https://i.ibb.co/D9tddRk/sweet.jpg" alt="Sweet Bonanza">
+      <span>Sweet Bonanza</span>
     </div>
   </div>
 </body>
