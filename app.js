@@ -6,23 +6,16 @@ const gridEl = document.getElementById("slotGrid");
 const messageEl = document.getElementById("message");
 const spinBtn = document.getElementById("spinBtn");
 
-// audio
 const spinSound = document.getElementById("spinSound");
 const winSound = document.getElementById("winSound");
 const scatterSound = document.getElementById("scatterSound");
 
-// ukuran grid 6x5
 const rows = 5;
 const cols = 6;
 let grid = [];
 
-// daftar multiplier
-const multipliers = [2, 3, 5, 10, 25, 50, 100];
-
-// state free spin
 let freeSpins = 0;
 
-// Buat grid acak
 function generateGrid() {
   grid = [];
   for (let r = 0; r < rows; r++) {
@@ -34,7 +27,6 @@ function generateGrid() {
   }
 }
 
-// Render ke HTML
 function renderGrid() {
   gridEl.innerHTML = "";
   for (let r = 0; r < rows; r++) {
@@ -48,7 +40,6 @@ function renderGrid() {
   }
 }
 
-// Cari kombinasi menang (≥8 sama, selain scatter)
 function findWins() {
   const counts = {};
   let scatterCount = 0;
@@ -65,26 +56,18 @@ function findWins() {
     }
   }
 
-  // scatter check
-  if (scatterCount >= 4) {
-    return { scatter: scatterCount };
-  }
+  if (scatterCount >= 4) return { scatter: scatterCount };
 
-  // simbol normal
-  let winners = null;
   for (let sym in counts) {
     if (counts[sym].length >= 8) {
-      winners = { symbol: sym, cells: counts[sym] };
-      break;
+      return { symbol: sym, cells: counts[sym] };
     }
   }
-  return winners;
+  return null;
 }
 
-// Hilangkan simbol menang + tumble
 function applyTumble(winners) {
   return new Promise(resolve => {
-    // highlight dulu
     const cells = document.querySelectorAll(".symbol");
     if (winners.cells) {
       winners.cells.forEach(({r, c}) => {
@@ -99,8 +82,6 @@ function applyTumble(winners) {
           grid[r][c] = null;
         });
       }
-
-      // tumble
       for (let c = 0; c < cols; c++) {
         let colSymbols = [];
         for (let r = rows-1; r >= 0; r--) {
@@ -113,7 +94,6 @@ function applyTumble(winners) {
           grid[r][c] = colSymbols[rows-1-r];
         }
       }
-
       renderGrid();
       resolve();
     }, 600);
@@ -141,32 +121,24 @@ async function spin() {
   renderGrid();
 
   let totalWin = 0;
-  let tumbleCount = 0;
 
   while (true) {
     const winners = findWins();
     if (!winners) break;
 
-    // scatter trigger
     if (winners.scatter) {
       scatterSound.play();
-      if (freeSpins === 0) {
-        freeSpins = 10;
-        messageEl.textContent = `⚡ SCATTER ${winners.scatter}x! Free Spin dimulai (10)`;
-      } else {
-        freeSpins += 5;
-        messageEl.textContent = `⚡ Retrigger! Tambah +5 Free Spin (${freeSpins})`;
-      }
+      freeSpins += (freeSpins === 0 ? 10 : 5);
+      messageEl.textContent = `⚡ Scatter! Free Spin = ${freeSpins}`;
       break;
     }
 
-    tumbleCount++;
-    const multi = multipliers[Math.floor(Math.random() * multipliers.length)];
+    const multi = [2,3,5,10,25,50,100][Math.floor(Math.random()*7)];
     const winAmount = bet * winners.cells.length * multi;
     totalWin += winAmount;
-
-    messageEl.textContent = `⚡ Tumble ${tumbleCount}: ${winners.symbol} ×${winners.cells.length} ×${multi} → +${winAmount} KN`;
     winSound.play();
+
+    messageEl.textContent = `⚡ ${winners.symbol} ×${winners.cells.length} ×${multi} → +${winAmount} KN`;
 
     await applyTumble(winners);
   }
@@ -178,12 +150,11 @@ async function spin() {
   }
 
   if (freeSpins > 0) {
-    setTimeout(spin, 1200); // auto jalan kalau free spin masih ada
+    setTimeout(spin, 1200);
   }
 }
 
 spinBtn.addEventListener("click", spin);
 
-// tampilkan awal
 generateGrid();
 renderGrid();
