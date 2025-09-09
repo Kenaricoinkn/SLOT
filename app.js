@@ -156,5 +156,6 @@ async function spin() {
 
 spinBtn.addEventListener("click", spin);
 
+// tampilkan grid pertama kali
 generateGrid();
 renderGrid();
