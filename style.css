@@ -3,54 +3,48 @@ body {
   background: #000;
   color: #fff;
   font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
 }
 
 header {
   background: #1a1a1a;
-  padding: 10px;
+  padding: 15px;
   text-align: center;
-  z-index: 2;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 22px;
 }
 
 .game-list {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  padding: 10px;
-  background: #111;
+  gap: 20px;
+  padding: 20px;
   flex-wrap: wrap;
 }
 
 .game-card {
-  width: 120px;
+  width: 150px;
   cursor: pointer;
   text-align: center;
   transition: transform 0.2s, box-shadow 0.3s;
 }
 
 .game-card:hover {
-  transform: scale(1.08);
+  transform: scale(1.1);
   box-shadow: 0 0 15px #ffcc00;
 }
 
 .game-card img {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 2px solid #444;
 }
 
 .game-card span {
   display: block;
-  margin-top: 5px;
-  font-size: 14px;
+  margin-top: 8px;
+  font-size: 15px;
   color: #ddd;
-}
-
-iframe {
-  flex: 1;
-  border: none;
-  width: 100%;
 }
