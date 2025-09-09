@@ -1,131 +1,189 @@
-// Symbols set
-const SYMBOLS = ["🍒","🔔","⭐","🍋","💎","7️⃣"];
-
-// Paytable
-const PAYTABLE = {
-  '⭐,⭐,⭐': 100,
-  '🍒,🍒,🍒': 10,
-  '🔔,🔔,🔔': 5,
-};
-
+const symbols = ["💎","🔮","💠","💰","👑","⭐","🔔","🍇","🍒","⚡"]; 
 let balance = 1000;
-let isSpinning = false;
-let autoMode = false;
 
-const balanceEl = document.getElementById('balance');
-const betInput = document.getElementById('betInput');
-const spinBtn = document.getElementById('spinBtn');
-const autoBtn = document.getElementById('autoBtn');
-const statusEl = document.getElementById('status');
-const historyEl = document.getElementById('history');
-const lastWinEl = document.getElementById('lastWin');
+const balanceEl = document.getElementById("balance");
+const gridEl = document.getElementById("slotGrid");
+const messageEl = document.getElementById("message");
+const spinBtn = document.getElementById("spinBtn");
 
-function formatNumber(n){ return n.toLocaleString('id-ID'); }
-function updateUI(){ balanceEl.textContent = formatNumber(balance); }
+// audio
+const spinSound = document.getElementById("spinSound");
+const winSound = document.getElementById("winSound");
+const scatterSound = document.getElementById("scatterSound");
 
-function populateReel(reel){
-  const container = reel.querySelector('.symbols');
-  container.innerHTML = '';
-  for(let i=0;i<12;i++){
-    const s = document.createElement('div');
-    s.className = 'symbol';
-    s.textContent = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
-    container.appendChild(s);
+// ukuran grid 6x5
+const rows = 5;
+const cols = 6;
+let grid = [];
+
+// daftar multiplier
+const multipliers = [2, 3, 5, 10, 25, 50, 100];
+
+// state free spin
+let freeSpins = 0;
+
+// Buat grid acak
+function generateGrid() {
+  grid = [];
+  for (let r = 0; r < rows; r++) {
+    let row = [];
+    for (let c = 0; c < cols; c++) {
+      row.push(symbols[Math.floor(Math.random() * symbols.length)]);
+    }
+    grid.push(row);
   }
-  container.style.top = '0px';
 }
 
-const reels = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
-reels.forEach(populateReel);
-updateUI();
+// Render ke HTML
+function renderGrid() {
+  gridEl.innerHTML = "";
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const div = document.createElement("div");
+      div.classList.add("symbol");
+      div.textContent = grid[r][c];
+      if (grid[r][c] === "⚡") div.classList.add("scatter");
+      gridEl.appendChild(div);
+    }
+  }
+}
 
-function spinOnce(){
-  if(isSpinning) return;
-  const bet = Math.max(1, Math.floor(Number(betInput.value) || 1));
-  if(bet > balance){ alert('Saldo tidak cukup.'); return; }
+// Cari kombinasi menang (≥8 sama, selain scatter)
+function findWins() {
+  const counts = {};
+  let scatterCount = 0;
 
-  isSpinning = true; statusEl.textContent = 'Berputar...';
-  balance -= bet; updateUI();
-
-  const targets = [];
-  for(let i=0;i<3;i++){
-    const r = Math.random();
-    if(r < 0.01) targets.push('⭐');
-    else if(r < 0.08) targets.push('7️⃣');
-    else if(r < 0.25) targets.push('💎');
-    else if(r < 0.45) targets.push('🔔');
-    else if(r < 0.70) targets.push('🍒');
-    else targets.push('🍋');
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const sym = grid[r][c];
+      if (sym === "⚡") {
+        scatterCount++;
+        continue;
+      }
+      counts[sym] = (counts[sym] || []);
+      counts[sym].push({r, c});
+    }
   }
 
-  const spinPromises = reels.map((reel, idx) => new Promise(resolve => {
-    const symbolsEl = reel.querySelector('.symbols');
-    const finalTop = targets[idx];
-    const stack = [];
-    for(let i=0;i<14;i++){ stack.push(i===8 ? finalTop : SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)]); }
-    symbolsEl.innerHTML = '';
-    stack.forEach(s => {
-      const d = document.createElement('div'); d.className='symbol'; d.textContent = s; symbolsEl.appendChild(d);
-    });
+  // scatter check
+  if (scatterCount >= 4) {
+    return { scatter: scatterCount };
+  }
 
-    const symbolHeight = symbolsEl.querySelector('.symbol').offsetHeight || 70;
-    const targetOffset = -symbolHeight * 8;
-    const duration = 900 + idx*220 + Math.floor(Math.random()*200);
-    symbolsEl.style.transition = `transform ${duration}ms cubic-bezier(.08,.77,.36,1)`;
+  // simbol normal
+  let winners = null;
+  for (let sym in counts) {
+    if (counts[sym].length >= 8) {
+      winners = { symbol: sym, cells: counts[sym] };
+      break;
+    }
+  }
+  return winners;
+}
 
-    requestAnimationFrame(()=>{ symbolsEl.style.transform = `translateY(${targetOffset}px)`; });
-
-    setTimeout(()=>{
-      symbolsEl.style.transition = '';
-      symbolsEl.style.transform = '';
-      populateReel(reel);
-      const first = reel.querySelectorAll('.symbol');
-      if(first.length>=3){ first[1].textContent = finalTop; }
-      resolve(targets[idx]);
-    }, duration + 60);
-  }));
-
-  Promise.all(spinPromises).then(results => {
-    isSpinning = false; statusEl.textContent = 'Siap';
-    const key = results.join(',');
-    let multiplier = 0;
-    if(PAYTABLE[key]) multiplier = PAYTABLE[key];
-    else if(results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) multiplier = 2;
-
-    const winAmount = Math.floor(bet * multiplier);
-    if(winAmount>0){
-      balance += winAmount; updateUI();
-      lastWinEl.textContent = `+${formatNumber(winAmount)}`;
-      appendHistory(`Win ${formatNumber(winAmount)} — [${results.join(' ')}]`);
-    } else {
-      lastWinEl.textContent = '—';
-      appendHistory(`Lose — [${results.join(' ')}]`);
+// Hilangkan simbol menang + tumble
+function applyTumble(winners) {
+  return new Promise(resolve => {
+    // highlight dulu
+    const cells = document.querySelectorAll(".symbol");
+    if (winners.cells) {
+      winners.cells.forEach(({r, c}) => {
+        const idx = r * cols + c;
+        cells[idx].classList.add("win");
+      });
     }
 
-    if(autoMode && balance >= Math.max(1, Number(betInput.value))){
-      setTimeout(spinOnce, 450);
-    } else {
-      autoMode = false; autoBtn.textContent = 'AUTO';
-    }
+    setTimeout(() => {
+      if (winners.cells) {
+        winners.cells.forEach(({r, c}) => {
+          grid[r][c] = null;
+        });
+      }
+
+      // tumble
+      for (let c = 0; c < cols; c++) {
+        let colSymbols = [];
+        for (let r = rows-1; r >= 0; r--) {
+          if (grid[r][c]) colSymbols.push(grid[r][c]);
+        }
+        while (colSymbols.length < rows) {
+          colSymbols.push(symbols[Math.floor(Math.random() * symbols.length)]);
+        }
+        for (let r = rows-1; r >= 0; r--) {
+          grid[r][c] = colSymbols[rows-1-r];
+        }
+      }
+
+      renderGrid();
+      resolve();
+    }, 600);
   });
 }
 
-function appendHistory(text){
-  const d = document.createElement('div');
-  d.textContent = `${new Date().toLocaleTimeString('id-ID')} · ${text}`;
-  historyEl.prepend(d);
-  while(historyEl.childElementCount>60) historyEl.removeChild(historyEl.lastChild);
+async function spin() {
+  const bet = parseInt(document.getElementById("bet").value);
+
+  if (freeSpins === 0) {
+    if (bet > balance || bet <= 0) {
+      messageEl.textContent = "❌ Bet tidak valid!";
+      return;
+    }
+    balance -= bet;
+    balanceEl.textContent = balance;
+    messageEl.textContent = "🎰 Memutar...";
+    spinSound.play();
+  } else {
+    messageEl.textContent = `🎁 Free Spin tersisa: ${freeSpins}`;
+    freeSpins--;
+  }
+
+  generateGrid();
+  renderGrid();
+
+  let totalWin = 0;
+  let tumbleCount = 0;
+
+  while (true) {
+    const winners = findWins();
+    if (!winners) break;
+
+    // scatter trigger
+    if (winners.scatter) {
+      scatterSound.play();
+      if (freeSpins === 0) {
+        freeSpins = 10;
+        messageEl.textContent = `⚡ SCATTER ${winners.scatter}x! Free Spin dimulai (10)`;
+      } else {
+        freeSpins += 5;
+        messageEl.textContent = `⚡ Retrigger! Tambah +5 Free Spin (${freeSpins})`;
+      }
+      break;
+    }
+
+    tumbleCount++;
+    const multi = multipliers[Math.floor(Math.random() * multipliers.length)];
+    const winAmount = bet * winners.cells.length * multi;
+    totalWin += winAmount;
+
+    messageEl.textContent = `⚡ Tumble ${tumbleCount}: ${winners.symbol} ×${winners.cells.length} ×${multi} → +${winAmount} KN`;
+    winSound.play();
+
+    await applyTumble(winners);
+  }
+
+  if (totalWin > 0) {
+    balance += totalWin;
+    balanceEl.textContent = balance;
+    messageEl.textContent += ` 🎉 Total Menang: ${totalWin} KN`;
+  }
+
+  if (freeSpins > 0) {
+    setTimeout(spin, 1200); // auto jalan kalau free spin masih ada
+  }
 }
 
-spinBtn.addEventListener('click', ()=>{ spinOnce(); });
-autoBtn.addEventListener('click', ()=>{
-  if(autoMode){ autoMode=false; autoBtn.textContent='AUTO'; }
-  else { autoMode=true; autoBtn.textContent='STOP'; spinOnce(); }
-});
+spinBtn.addEventListener("click", spin);
 
-document.getElementById('addCoins').addEventListener('click', ()=>{ balance += 100; updateUI(); appendHistory('Added +100 coins'); });
-document.getElementById('resetBtn').addEventListener('click', ()=>{ if(confirm('Reset saldo ke 1000?')){ balance=1000; updateUI(); historyEl.innerHTML=''; appendHistory('Reset balance'); lastWinEl.textContent='—'; } });
-betInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ spinOnce(); } });
-
-appendHistory('Selamat datang di KenariSlot (demo)');
-console.log('KenariSlot demo — tidak memproses pembayaran.');
+// tampilkan awal
+generateGrid();
+renderGrid();
