@@ -10,56 +10,45 @@
       background: #000;
       color: #fff;
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
     }
 
     header {
       background: #1a1a1a;
-      padding: 10px;
+      padding: 15px;
       text-align: center;
-      z-index: 2;
     }
 
     .game-list {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      padding: 10px;
-      background: #111;
+      gap: 20px;
+      padding: 20px;
       flex-wrap: wrap;
     }
 
     .game-card {
-      width: 120px;
+      width: 140px;
       cursor: pointer;
       text-align: center;
       transition: transform 0.2s, box-shadow 0.3s;
     }
 
     .game-card:hover {
-      transform: scale(1.08);
+      transform: scale(1.1);
       box-shadow: 0 0 15px #ffcc00;
     }
 
     .game-card img {
       width: 100%;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 2px solid #444;
     }
 
     .game-card span {
       display: block;
-      margin-top: 5px;
-      font-size: 14px;
+      margin-top: 8px;
+      font-size: 15px;
       color: #ddd;
-    }
-
-    iframe {
-      flex: 1;
-      border: none;
-      width: 100%;
     }
   </style>
 </head>
@@ -69,50 +58,18 @@
   </header>
 
   <div class="game-list">
-    <div class="game-card" data-game="mahjong">
+    <div class="game-card" onclick="window.open('https://m.pgsoft-games.com/mahjong-ways-3/index.html', '_blank')">
       <img src="https://cdn.pgsoft-games.com/mahjong-ways-3/icon.png" alt="Mahjong Wins 3">
       <span>Mahjong Wins 3</span>
     </div>
-    <div class="game-card" data-game="luckyneko">
+    <div class="game-card" onclick="window.open('https://m.pgsoft-games.com/lucky-neko/index.html', '_blank')">
       <img src="https://cdn.pgsoft-games.com/lucky-neko/icon.png" alt="Lucky Neko">
       <span>Lucky Neko</span>
     </div>
-    <div class="game-card" data-game="treasures">
+    <div class="game-card" onclick="window.open('https://m.pgsoft-games.com/treasures-aztec/index.html', '_blank')">
       <img src="https://cdn.pgsoft-games.com/treasures-aztec/icon.png" alt="Treasures of Aztec">
       <span>Treasures of Aztec</span>
     </div>
   </div>
-
-  <iframe id="gameFrame" allowfullscreen></iframe>
-
-  <script>
-    // daftar link demo game PGSoft
-    const gameLinks = {
-      mahjong: "https://m.pgsoft-games.com/mahjong-ways-3/index.html",
-      luckyneko: "https://m.pgsoft-games.com/lucky-neko/index.html",
-      treasures: "https://m.pgsoft-games.com/treasures-aztec/index.html"
-    };
-
-    const gameFrame = document.getElementById("gameFrame");
-    const gameCards = document.querySelectorAll(".game-card");
-
-    // fungsi untuk load game
-    function loadGame(key) {
-      if (gameLinks[key]) {
-        gameFrame.src = gameLinks[key];
-      }
-    }
-
-    // kasih event click ke semua card
-    gameCards.forEach(card => {
-      card.addEventListener("click", () => {
-        const key = card.getAttribute("data-game");
-        loadGame(key);
-      });
-    });
-
-    // default pertama kali load Mahjong
-    loadGame("mahjong");
-  </script>
 </body>
 </html>
