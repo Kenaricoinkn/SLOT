@@ -3,27 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kenari Zeus Slot</title>
+  <title>Kenari Slot Demo</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 <body>
-  <div class="slot-container">
-    <h1>⚡ Gates of Kenari (Zeus Clone)</h1>
-    <div class="hud">
-      <span>Saldo: <span id="balance">1000</span></span>
-      <span>Bet: <span id="bet">10</span></span>
+  <header>
+    <h2>🎰 Kenari Slot Demo</h2>
+  </header>
+
+  <div class="game-list">
+    <div class="game-card" onclick="loadGame('mahjong')">
+      <img src="https://i.imgur.com/kfJb6Ok.jpg" alt="Mahjong Wins 3">
+      <span>Mahjong Wins 3</span>
     </div>
-    <div id="grid" class="grid"></div>
-    <button id="spinBtn">SPIN</button>
+    <div class="game-card" onclick="loadGame('zeus')">
+      <img src="https://i.imgur.com/t5y7v4E.jpg" alt="Gates of Olympus">
+      <span>Zeus</span>
+    </div>
+    <div class="game-card" onclick="loadGame('sweet')">
+      <img src="https://i.imgur.com/f6rQH8V.jpg" alt="Sweet Bonanza">
+      <span>Sweet Bonanza</span>
+    </div>
   </div>
 
-  <!-- Efek kilat -->
-  <div class="lightning"></div>
-
-  <!-- Suara -->
-  <audio id="sound-spin" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-wheel-1930.mp3"></audio>
-  <audio id="sound-thunder" src="https://assets.mixkit.co/sfx/preview/mixkit-thunder-crack-1713.mp3"></audio>
+  <iframe id="gameFrame" allowfullscreen></iframe>
 
   <script src="app.js"></script>
 </body>
