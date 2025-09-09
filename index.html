@@ -5,31 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kenari Zeus Slot</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 <body>
-  <div class="game-container">
+  <div class="slot-container">
     <h1>⚡ Gates of Kenari (Zeus Clone)</h1>
-
-    <div class="balance">
-      Saldo: <span id="balance">1000</span> KN
+    <div class="hud">
+      <span>Saldo: <span id="balance">1000</span></span>
+      <span>Bet: <span id="bet">10</span></span>
     </div>
-
-    <div class="slot-grid" id="slotGrid"></div>
-
-    <div class="controls">
-      <label>Bet: 
-        <input type="number" id="bet" value="20" min="1">
-      </label>
-      <button id="spinBtn">SPIN</button>
-    </div>
-
-    <div id="message"></div>
+    <div id="grid" class="grid"></div>
+    <button id="spinBtn">SPIN</button>
   </div>
 
-  <!-- Audio -->
-  <audio id="spinSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8e8e4df1c0.mp3?filename=slot-machine-spin-108223.mp3"></audio>
-  <audio id="winSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_73f9e1a6ac.mp3?filename=slot-machine-win-108222.mp3"></audio>
-  <audio id="scatterSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0f0cf56c7c.mp3?filename=thunder-strike-108221.mp3"></audio>
+  <!-- Efek kilat -->
+  <div class="lightning"></div>
+
+  <!-- Suara -->
+  <audio id="sound-spin" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-wheel-1930.mp3"></audio>
+  <audio id="sound-thunder" src="https://assets.mixkit.co/sfx/preview/mixkit-thunder-crack-1713.mp3"></audio>
 
   <script src="app.js"></script>
 </body>
