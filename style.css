@@ -1,6 +1,6 @@
 body {
   font-family: Arial, sans-serif;
-  background: #0d0d2b;
+  background: linear-gradient(180deg, #0d0d2b, #1a1a40);
   color: #fff;
   text-align: center;
   margin: 0;
@@ -11,7 +11,7 @@ body {
   max-width: 600px;
   margin: 30px auto;
   padding: 20px;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.85);
   border-radius: 12px;
 }
 
@@ -22,16 +22,20 @@ h1 { margin-bottom: 15px; }
 .slot-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 5px;
+  gap: 6px;
   margin: 15px 0;
 }
 
 .symbol {
-  font-size: 28px;
-  padding: 10px;
+  font-size: 32px;
+  padding: 12px;
   background: #222;
   border: 2px solid #666;
   border-radius: 6px;
+  color: #fff; /* biar kelihatan */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .symbol.win {
