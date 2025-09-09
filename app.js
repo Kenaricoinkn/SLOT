@@ -5,10 +5,20 @@ const gameLinks = {
 };
 
 const gameFrame = document.getElementById("gameFrame");
+const gameCards = document.querySelectorAll(".game-card");
 
+// fungsi load game
 function loadGame(key) {
   gameFrame.src = gameLinks[key];
 }
 
-// default load Mahjong
+// kasih event click ke semua card
+gameCards.forEach(card => {
+  card.addEventListener("click", () => {
+    const key = card.getAttribute("data-game");
+    loadGame(key);
+  });
+});
+
+// default pertama kali load Mahjong
 loadGame("mahjong");
