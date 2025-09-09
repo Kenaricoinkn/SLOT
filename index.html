@@ -1,63 +1,35 @@
-<!doctype html>
-<html lang="id">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KenariSlot — Demo Slot Machine</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kenari Zeus Slot</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">KN</div>
-      <div>
-        <h1>KenariSlot — Demo Mesin Slot (Non-Uang)</h1>
-        <p class="lead">Versi demo: permainan berbasis JavaScript untuk keperluan visual & integrasi front-end.</p>
-      </div>
-    </header>
+  <div class="game-container">
+    <h1>⚡ Gates of Kenari (Zeus Clone)</h1>
 
-    <div class="main">
-      <section class="slot-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div style="font-weight:700">Arena Slot</div>
-          <div id="status" style="font-size:13px;color:rgba(230,238,248,.8)">Siap</div>
-        </div>
-
-        <div class="reels">
-          <div class="reel" id="reel1"><div class="symbols"></div></div>
-          <div class="reel" id="reel2"><div class="symbols"></div></div>
-          <div class="reel" id="reel3"><div class="symbols"></div></div>
-        </div>
-
-        <div class="controls">
-          <button id="spinBtn" class="btn-primary">SPIN</button>
-          <button id="autoBtn" class="btn-ghost">AUTO</button>
-        </div>
-
-        <div class="paytable">
-          <strong>Paytable (contoh):</strong>
-          <div>3 x ⭐ = 100x bet • 3 x 🍒 = 10x bet • 3 x 🔔 = 5x bet • Any two matched = 2x</div>
-        </div>
-      </section>
-
-      <aside class="panel">
-        <div class="row"><label>Saldo</label><div style="margin-left:auto" class="balance" id="balance">1,000</div></div>
-        <div class="row"><label>Bet per Putaran</label><input id="betInput" type="number" min="1" value="5" /></div>
-        <div class="row"><label>Putaran</label><div style="margin-left:auto" id="lastWin">—</div></div>
-        <div class="panel-buttons">
-          <button id="addCoins" class="btn-ghost">+100</button>
-          <button id="resetBtn" class="btn-ghost">Reset</button>
-        </div>
-
-        <div class="history-box">
-          <strong>Riwayat Singkat</strong>
-          <div id="history"></div>
-        </div>
-
-        <footer class="note">Catatan: Ini hanya demo — tidak ada pemrosesan pembayaran atau perjudian uang nyata.</footer>
-      </aside>
+    <div class="balance">
+      Saldo: <span id="balance">1000</span> KN
     </div>
+
+    <div class="slot-grid" id="slotGrid"></div>
+
+    <div class="controls">
+      <label>Bet: 
+        <input type="number" id="bet" value="20" min="1">
+      </label>
+      <button id="spinBtn">SPIN</button>
+    </div>
+
+    <div id="message"></div>
   </div>
+
+  <!-- Audio -->
+  <audio id="spinSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8e8e4df1c0.mp3?filename=slot-machine-spin-108223.mp3"></audio>
+  <audio id="winSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_73f9e1a6ac.mp3?filename=slot-machine-win-108222.mp3"></audio>
+  <audio id="scatterSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0f0cf56c7c.mp3?filename=thunder-strike-108221.mp3"></audio>
 
   <script src="app.js"></script>
 </body>
